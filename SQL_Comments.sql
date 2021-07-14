@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS wp_custom_inventory
     Title TEXT, 
     ProductDescription TEXT, 
     FilePath TEXT,
-    FileName TEXT,
+    ImageName_1 TEXT,
     StoreDate DATETIME
 ); 
 
@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS wp_custom_inventory
 --     
 -- ALTER TABLE wp_custom_inventory 
 -- 	Drop test ;
+
+
+-- ALTER TABLE wp_custom_inventory
+-- CHANGE COLUMN `FileName` `ImageName_1` Text NOT NULL;  
     
  
 
