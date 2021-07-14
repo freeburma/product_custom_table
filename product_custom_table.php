@@ -18,6 +18,14 @@
         exit; 
     }// end if 
 
+
+    if ( ! class_exists('WP_List_Table'))
+    {
+        require_once(dirname(__FILE__) . '/wp-admin/includes/class-wp-list-table.php'); 
+    }// end if 
+
+    require(dirname(__FILE__) . '/include/InventoryList.php'); 
+
     function product_custom_table_renderer()
     {
         add_menu_page( 
@@ -32,8 +40,12 @@
 
     function product_page()
     {
+        $inventoryList = new InventoryList(); 
+        $inventoryList->prepare_items(); 
 
-        include(dirname(__FILE__) . '/views/product.php'); 
+
+
+        include(dirname(__FILE__) . '/views/InventoryView.php'); 
 
     }// end product_page()
 
