@@ -26,6 +26,12 @@
 
     require(dirname(__FILE__) . '/include/InventoryList.php'); 
 
+    wp_enqueue_style( 'BootstrapCSS', '//maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
+
+    wp_enqueue_script( 'JQuery', '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js'); 
+    wp_enqueue_script( 'Propper', '//cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js'); 
+    wp_enqueue_script( 'BootstrapJS', '//maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js'); 
+
     function product_custom_table_renderer()
     {
         add_menu_page( 
@@ -36,6 +42,16 @@
                         'product_page', 
                         'dashicons-text-page'
                     ); 
+
+
+        add_submenu_page( 
+                'tutorial_product', 
+                'Inventory', 
+                'Inventory', 
+                'manage_options', 
+                'tutorial_product_crud', 
+                'Inventory_CRUD_page' 
+        ); 
     }// end product_custom_table_renderer()
 
     function product_page()
@@ -48,6 +64,11 @@
         include(dirname(__FILE__) . '/views/InventoryView.php'); 
 
     }// end product_page()
+
+    function Inventory_CRUD_page()
+    {
+        include(dirname(__FILE__) . '/views/InventoryCRUDViews.php'); 
+    }// end Inventory_CRUD_page()
 
     
 
