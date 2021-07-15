@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS wp_custom_inventory
 
 -- ALTER TABLE wp_custom_inventory
 -- CHANGE COLUMN `FileName` `ImageName_1` Text NOT NULL;  
+
+SELECT * FROM wp_custom_inventory; 
     
  
 

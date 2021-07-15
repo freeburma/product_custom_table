@@ -52,6 +52,15 @@
                 'tutorial_product_crud', 
                 'Inventory_CRUD_page' 
         ); 
+
+        add_submenu_page( 
+            'tutorial_product', 
+            'Test Image Upload', 
+            'Test Image Upload', 
+            'manage_options', 
+            'testfileupload', 
+            'Test_File_Upload_page' 
+    ); 
     }// end product_custom_table_renderer()
 
     function product_page()
@@ -68,6 +77,11 @@
     function Inventory_CRUD_page()
     {
         include(dirname(__FILE__) . '/views/InventoryCRUDViews.php'); 
+    }// end Inventory_CRUD_page()
+
+    function Test_File_Upload_page()
+    {
+        include(dirname(__FILE__) . '/views/TestFileupload.php'); 
     }// end Inventory_CRUD_page()
 
     
