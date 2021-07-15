@@ -65,7 +65,7 @@
                 $productQuery = $wpdb->prepare(" INSERT INTO wp_custom_inventory
                                                  (`Title`, `ProductDescription`, `FilePath`, `ImageName_1`, `StoreDate`)     
                                                  VALUES (%s, %s, %s, %s, %s)", 
-                                                 $productTitle, $productDescription, $productFilePath, $productImageName_1, $productStoreDate
+                                                 $productTitle, $productDescription, $dirName, $productImageName_1, $productStoreDate
                                                 ); 
 
                 $wpdb->query($productQuery); 
@@ -131,10 +131,7 @@
                     }
                 }
 
-                // $open = fopen($productFilePath . "/" . $productImageName_1, "w");                
-                // fclose($open);  
-
-
+               
 
 
             }// end if 
