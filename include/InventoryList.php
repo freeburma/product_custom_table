@@ -17,7 +17,9 @@ class InventoryList extends WP_List_Table
             'cb'            => '<input type="checkbox" />', // Multiple select
             'Id'            => _x('Id', 'Column label', 'inventory'),
             'Title'         => _x('Title', 'Column label', 'inventory'),
-            'Description'    => _x('Description', 'Column label', 'inventory'),
+            'ProductDescription'    => _x('Product Description', 'Column label', 'inventory'),
+            'ImageName_1'    => _x('ImageName 1', 'Column label', 'inventory'),
+            'StoreDate'    => _x('Store Date', 'Column label', 'inventory'),
         ); 
 
         return $columns; 
@@ -29,8 +31,9 @@ class InventoryList extends WP_List_Table
         $sortable_columns = array(
             'Id'            => array('Id', false),
             'Title'         => array('Title', false),
-            'Description'    => array('Description', false),
-            
+            // 'ProductDescription'    => array('Product Description', false),
+            'ImageName_1'    => array('ImageName 1', false),
+            'StoreDate'    => array('Store Date', false),            
         ); 
 
         return $sortable_columns; 
@@ -47,7 +50,9 @@ class InventoryList extends WP_List_Table
         {
             case 'Id':
             case 'Title':
-            case 'Description':
+            case 'ProductDescription':
+            case 'ImageName_1':
+            case 'StoreDate':
                 return $item[$column_name]; 
             
             default: 
@@ -81,40 +86,40 @@ class InventoryList extends WP_List_Table
 
          // Detail Info
          $detail_query_args = array(
-            'page'  => "Add_Edit_SaleData", // Must Be "PHP view file"
+            'page'  => "tutorial_product_crud", // Must Be "PHP view file"
             'action' => 'detail', 
             'Id' => $item['Id'], // Passing as the routing parameter
         ); 
 
         // Edit Info
         $edit_query_args = array(
-            'page'  => "Add_Edit_SaleData", // Must Be "PHP view file"
+            'page'  => "tutorial_product_crud", // Must Be "PHP view file"
             'action' => 'edit', 
             'Id' => $item['Id'], // Passing as the routing parameter
         ); 
 
         // Delete Info
         $delete_query_args = array(
-            'page'  => "Add_Edit_SaleData", // Must Be "PHP view file"
+            'page'  => "tutorial_product_crud", // Must Be "PHP view file"
             'action' => 'delete', 
             'Id' => $item['Id'], // Passing as the routing parameter
         ); 
 
         $actions['detail'] = sprintf(
             '<a href="%1$s">%2$s</a>', 
-            esc_url( wp_nonce_url( add_query_arg($detail_query_args, 'admin.php'), '', "myplugin_nonce" )), 
+            esc_url( wp_nonce_url( add_query_arg($detail_query_args, 'admin.php'), '', "inventory_nonce" )), 
             _x('Detail', 'List table row action', 'sale-data')
         ); 
 
         $actions['edit'] = sprintf(
             '<a href="%1$s">%2$s</a>', 
-            esc_url( wp_nonce_url( add_query_arg($edit_query_args, 'admin.php'), '', "myplugin_nonce" )), 
+            esc_url( wp_nonce_url( add_query_arg($edit_query_args, 'admin.php'), '', "inventory_nonce" )), 
             _x('Edit', 'List table row action', 'sale-data')
         ); 
 
         $actions['delete'] = sprintf(
             '<a href="%1$s">%2$s</a>', 
-            esc_url( wp_nonce_url( add_query_arg($delete_query_args, 'admin.php'), '', "myplugin_nonce" )), 
+            esc_url( wp_nonce_url( add_query_arg($delete_query_args, 'admin.php'), '', "inventory_nonce" )), 
             _x('Delete', 'List table row action', 'sale-data')
         ); 
 
@@ -152,9 +157,9 @@ class InventoryList extends WP_List_Table
     protected function usort_reorder($a, $b)
     {
         // If no sort, default to Id.
-        $orderby = ! empty( $_REQUEST['orderby'] ) ? wp_unslash( $_REQUEST['orderby'] ) : 'Id'; // WPCS: Input var ok.
+        $orderby = ! empty( $_REQUEST['orderby'] ) ? wp_unslash( $_REQUEST['orderby'] ) : ''; // WPCS: Input var ok.
 
-        // If no order, default to asc.
+        // // If no order, default to asc.
         $order = ! empty( $_REQUEST['order'] ) ? wp_unslash( $_REQUEST['order'] ) : 'dsc'; // WPCS: Input var ok.
 
         // Determine sort order.
@@ -179,34 +184,34 @@ class InventoryList extends WP_List_Table
 
         global $wpdb; 
 
-        // $saleDataFromDb = $wpdb->get_results(
-        //     $wpdb->prepare("SELECT * FROM wp_Custom_SaleData")
-        // ); 
+        $productDataFromDb = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM wp_custom_inventory")
+        ); 
 
-        // $saleDataFromDb = $wpdb->get_results(
-        //     "SELECT * FROM wp_Custom_SaleData"
-        // ); 
+        
 
         $data = array(); 
 
 
-        // foreach ($saleDataFromDb as $saleData) 
-        // {
-        //     $saleDataDetail = array(
-        //         'Id' =>  $saleData->Id, 
-        //         'Title' => $saleData->Title, 
-        //         'Description' => $saleData->Description, 
+        foreach ($productDataFromDb as $saleData) 
+        {
+            $saleDataDetail = array(
+                'Id' =>  $saleData->Id, 
+                'Title' => $saleData->Title, 
+                'ProductDescription' => wp_trim_words( $saleData->ProductDescription, 20, '  ...' ) , 
+                'ImageName_1' => $saleData->ImageName_1, 
+                'StoreDate' => $saleData->StoreDate, 
 
-        //     ); 
+            ); 
 
-        //     //// Adding the data to array
-        //     array_push($data, $saleDataDetail); 
+            //// Adding the data to array
+            array_push($data, $saleDataDetail); 
 
-        // }// end foreach
+        }// end foreach
 
         // print_r($data); 
 
-        // usort($data, array($this, 'usort_reorder')); // usort_reorder: is a callback function
+        usort($data, array($this, 'usort_reorder')); // usort_reorder: is a callback function
 
         $per_page = 10; // Number of items per page 
         $current_page = $this->get_pagenum(); 

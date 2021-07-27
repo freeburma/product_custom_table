@@ -3,15 +3,15 @@
     $productTitle = null; 
     $productDescription = null; 
 
-    $dirName = "imgs"; 
-    $productFileBase = get_template_directory() ; 
-    $productFilePath = $productFileBase . "/" . $dirName . "/"; 
+    // $dirName = "imgs"; 
+    // $productFileBase = get_template_directory() ; 
+    // $productFilePath = $productFileBase . "/" . $dirName . "/"; 
 
-    if ( ! file_exists($productFilePath))
-    {
-        mkdir($productFilePath); 
+    // if ( ! file_exists($productFilePath))
+    // {
+    //     mkdir($productFilePath); 
         
-    }// end if 
+    // }// end if 
 
     // //// Getting theme path and url
     // echo "get_template_directory_uri : ". get_template_directory_uri() . "<br />"; 
@@ -42,7 +42,34 @@
 
     if ( ! empty($getId))
     {
+        $productDataDb = $wpdb->get_row("SELECT * FROM wp_custom_inventory WHERE Id = " . $getId); 
 
+        $id = $productDataDb->Id; 
+        $productTitle = $productDataDb->Title; 
+        $productDescription = $productDataDb->ProductDescription; 
+        $productImageName_1 = $productDataDb->ImageName_1; 
+
+        $nounce = $_POST["inventory_nonce"]; 
+
+
+
+        if (isset($_POST["UpdatingProduct"]))
+        {
+            if (wp_verify_nonce( $nounce, 'inventory_nonce' ))
+            {
+                
+            }// end if
+        }// end if 
+
+        if (isset($_POST["DeletingProduct"]))
+        {
+            if (wp_verify_nonce( $nounce, 'inventory_nonce' ))
+            {
+                
+            }// end if
+        }// end if 
+        
+        
     }
     else 
     {
@@ -156,7 +183,7 @@
 
         <div class="form-group">
             <label for="title">Product Title:</label>
-            <input type="text" class="form-control" id="title" placeholder="Enter Product Title" name="title" required>
+            <input type="text" class="form-control" id="title" placeholder="Enter Product Title" name="title" value="<?php echo $productTitle ?>" required>
 
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
@@ -166,7 +193,7 @@
 
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea rows="10" cols="10" class="form-control" id="description" placeholder="Enter Description" name="description" required></textarea>
+            <textarea rows="10" cols="10" class="form-control" id="description" placeholder="Enter Description" name="description" required><?php echo $productDescription ?></textarea>
 
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
@@ -174,13 +201,35 @@
 
         <div class="form-group ">
             <div class="custom-file col-lg-3 col-md-3 col-s-3 col-xs-3">
-                <input type="file" class="custom-file-input" id="photo"  name="photo_1" required /> 
+                <input type="file" class="custom-file-input" id="photo"  name="photo_1" <?php ( ! empty($productImageName_1)) ?? "required" ?>  /> 
                 
                 <div class="custom-file-label valid-feedback">Photo uploaded.</div>
-                <div class="custom-file-label invalid-feedback">Upload your photo.</div>
+                <div class="custom-file-label invalid-feedback">
+                    <?php 
+                        if ( empty($productImageName_1)) 
+                        { 
+                            echo "Upload your photo." ; 
+                        } 
+                        else 
+                        { 
+                            echo $productImageName_1; 
+                        } 
+                    ?>
+                </div>
             </div>
 
-            <div class="fileName">Upload your photo.</div>
+            <div class="fileName">
+                <?php 
+                    if ( empty($productImageName_1)) 
+                    { 
+                        echo "Upload your photo." ; 
+                    } 
+                    else 
+                    { 
+                        echo $productImageName_1; 
+                    } 
+                ?>
+            </div>
 
 
         </div>
