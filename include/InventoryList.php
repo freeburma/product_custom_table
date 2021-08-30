@@ -185,7 +185,7 @@ class InventoryList extends WP_List_Table
         global $wpdb; 
 
         $productDataFromDb = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM wp_custom_inventory")
+            $wpdb->prepare("SELECT * FROM wp_custom_inventory", null)
         ); 
 
         
