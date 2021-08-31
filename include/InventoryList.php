@@ -157,7 +157,7 @@ class InventoryList extends WP_List_Table
     protected function usort_reorder($a, $b)
     {
         // If no sort, default to Id.
-        $orderby = ! empty( $_REQUEST['orderby'] ) ? wp_unslash( $_REQUEST['orderby'] ) : ''; // WPCS: Input var ok.
+        $orderby = ! empty( $_REQUEST['orderby'] ) ? wp_unslash( $_REQUEST['orderby'] ) : 'Id'; // WPCS: Input var ok.
 
         // // If no order, default to asc.
         $order = ! empty( $_REQUEST['order'] ) ? wp_unslash( $_REQUEST['order'] ) : 'dsc'; // WPCS: Input var ok.

@@ -37,8 +37,8 @@
     date_default_timezone_set('Pacific/Auckland');  // Change to your default timezone 
     $productStoreDate = date("Y-m-d H:i:s");       // Expected output: 2021-07-15 05:02:21 pm
 
-    $getId = $_GET["Id"]; 
-    $getAction = $_GET["action"]; 
+    $getId = (empty($_GET["Id"]) ? null : $_GET["Id"]); 
+    $getAction = (empty($_GET["action"]) ? null : $_GET["action"]); 
 
     global $wpdb; 
 
@@ -51,8 +51,7 @@
         $productDescription = $productDataDb->ProductDescription; 
         $productImageName_1 = $productDataDb->ImageName_1; 
 
-        $nounce = $_POST["inventory_nonce"]; 
-
+        $nounce = (empty($_POST["inventory_nonce"]) ? null : $_POST["inventory_nonce"]); 
 
 
         if (isset($_POST["UpdatingProduct"]))
@@ -122,7 +121,8 @@
     }
     else 
     {
-        $nounce = $_POST["inventory_nonce"]; 
+        $nounce = (empty($_POST["inventory_nonce"]) ? null : $_POST["inventory_nonce"]); 
+
 
         if (isset($_POST["AddingProduct"]))
         {
