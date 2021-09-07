@@ -70,7 +70,16 @@
                 $productTitle = sanitize_text_field( $_POST["title"] ); 
                 $productDescription = sanitize_text_field( $_POST["description"] ); 
                 // $productImageName_1 = sanitize_text_field( $_POST["photo_1"] ); 
-                $productImageName_1 = sanitize_text_field( $_FILES["photo_1"]["name"]); 
+                $productImageName_1 = sanitize_text_field( $_FILES["photo_1"]["name"]); //// Expected new image. Might be empty/old one. 
+                //// Checking the whether to remove the old image or not. 
+                //// The image will not removed if the user still wants to use same image when 
+                //// he/she uses the editing mode. 
+                $isRemovedFile = TRUE; 
+                if (empty($productImageName_1) OR is_null($productImageName_1)) 
+                {
+                    $isRemovedFile = FALSE; 
+                    $productImageName_1 = $productImageName_1_Old; //// New Image is as same as old image. 
+                }// end if 
 
                 //// 1. Update the new info in db 
                 $inventoryQuery = array(
@@ -85,10 +94,15 @@
                 //// 2. Add the new picture 
                 $wpdb->update('wp_custom_inventory', $inventoryQuery, array('Id' => $getId)); 
 
-                //// 3. Delete Old picture 
-                $target_file = $productFilePath . $productImageName_1_Old;
+                //// Removing file - after the user uploaded the new images only. 
+                if ($isRemovedFile)
+                {
+                    //// 3. Delete Old picture 
+                    $target_file = $productFilePath . $productImageName_1_Old;
 
-                RemoveFile($target_file); 
+                    RemoveFile($target_file); 
+                }// end if 
+                
             }// end if
 
             print('<script>window.location.href="admin.php?page=tutorial_product"</script>');
