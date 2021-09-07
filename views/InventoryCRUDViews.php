@@ -98,6 +98,13 @@
                 if ($isRemovedFile)
                 {
                     //// 3. Delete Old picture 
+                    $target_file = $productFilePath . $productImageName_1;
+                    AddFile($target_file); 
+
+
+                    //// ============ Write the photo to a file =============
+                    // //// Ref: https://www.w3schools.com/php/php_file_upload.asp
+                    $target_file = null; 
                     $target_file = $productFilePath . $productImageName_1_Old;
 
                     RemoveFile($target_file); 
